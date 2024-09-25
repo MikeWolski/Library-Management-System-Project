@@ -1,3 +1,11 @@
+import os
+
+# Define a function to clear the screen
+def clear_screen():
+    if os.name == 'nt':  # For Windows
+        os.system('cls')
+    else:  # For macOS and Linux
+        os.system('clear')
 
 # Define a class called Book which represents a book in the library.
 class Book:
@@ -96,10 +104,12 @@ users = [
 # Create a library object with the books and users lists.
 library = Library(books, users)
 
+clear_screen()
 print("Welcome to the library!")
 input("How can we help you today? Press Enter for Test Mode...")
+clear_screen()
 print(" -----------------------------")
-print("| Automated Library Test Mode |")
+print("| Library Test Mode Main Menu |")
 print(" -----------------------------")
 print("Which class would you like to test:")
 print("1. Book")
@@ -108,14 +118,9 @@ print("3. Library")
 
 while True:
     try:
-        selected_class_for_testing = int(input("Choose 1,2, or 3: "))
+        selected_class_for_testing = int(input("Choose 1, 2, or 3: "))
+        clear_screen()
         if selected_class_for_testing in [1, 2, 3]:
-            if selected_class_for_testing == 1:
-                print("You have selected to test the Book class.")
-            elif selected_class_for_testing == 2:
-                print("You have selected to test the User class.")
-            elif selected_class_for_testing == 3:
-                print("You have selected to test the Library class.")
             break
         else:
             print("Invalid selection. Please choose 1, 2, or 3.")
@@ -123,62 +128,58 @@ while True:
         print("Invalid selection. Please choose 1, 2, or 3.")
 
 if selected_class_for_testing == 1:
-    print("Testing the Book class...")
-    print("Available books:")
-    library.list_available_books()
-    print("Borrowing a book...")
-    user = users[0]
-    book = books[0]
-    if library.borrow_book(user, book):
-        print("Book borrowed successfully.")
-    else:
-        print("Book not available for borrowing.")
-    print("Available books:")
-    library.list_available_books()
-    print("Returning a book...")
-    if library.return_book(user, book):
-        print("Book returned successfully.")
-    else:
-        print("Book not available for returning.")
-    print("Available books:")
-    library.list_available_books()
+    print(" --------------")
+    print("| Book Testing |")
+    print(" --------------")
+    print("Which method of the Book class would you like to test:")
+    print("1. Test the creation of a book object")
+    print("2. Test borrowing and returning functionality (whether the availability status changes)")
+    print("3. Return to Test Mode main menu")
+    while True:
+        try:
+            selected_class_for_testing = int(input("Choose 1, 2, or 3: "))
+            clear_screen()
+            if selected_class_for_testing in [1, 2, 3]:
+                break
+            else:
+                print("Invalid selection. Please choose 1, 2, or 3.")
+        except ValueError:
+            print("Invalid selection. Please choose 1, 2, or 3.")
 elif selected_class_for_testing == 2:
-    print("Testing the User class...")
-    user = users[0]
-    print("Borrowed books for user " + user.name + ":")
-    user.view_borrowed_books()
-    print("Borrowing a book...")
-    book = books[0]
-    if user.borrow_book(book):
-        print("Book borrowed successfully.")
-    else:
-        print("Book not available for borrowing.")
-    print("Borrowed books for user " + user.name + ":")
-    user.view_borrowed_books()
-    print("Returning a book...")
-    if user.return_book(book):
-        print("Book returned successfully.")
-    else:
-        print("Book not available for returning.")
-    print("Borrowed books for user " + user.name + ":")
-    user.view_borrowed_books()
+    print(" --------------")
+    print("| User Testing |")
+    print(" --------------")
+    print("Which method of the User class would you like to test:")
+    print("1. Test the borrowing functionality (whether the user can borrow available books)")
+    print("2. Test the return functionality (whether the user can return books)")
+    print("3. Test viewing borrowed books")
+    print("4. Return to Test Mode main menu")
+    while True:
+        try:
+            selected_class_for_testing = int(input("Choose 1, 2, 3, or 4: "))
+            clear_screen()
+            if selected_class_for_testing in [1, 2, 3, 4]:
+                break
+            else:
+                print("Invalid selection. Please choose 1, 2, 3, or 4.")
+        except ValueError:
+            print("Invalid selection. Please choose 1, 2, 3, or 4.")
 elif selected_class_for_testing == 3:
-    print("Testing the Library class...")
-    print("Available books:")
-    library.list_available_books()
-    print("Borrowing a book...")
-    user = users[0]
-    book = books[0]
-    if library.borrow_book(user, book):
-        print("Book borrowed successfully.")
-    else:
-        print("Book not available for borrowing.")
-    print("Available books:")
-    library.list_available_books()
-    print("Returning a book...")
-    if library.return_book(user, book):
-        print("Book returned successfully.")
-    else:
-        print("Book not available for returning.")
-    print("Available books:")
-    library.list_available_books()
+    print(" -----------------")
+    print("| Library Testing |")
+    print(" -----------------")
+    print("Which method of the Library class would you like to test:")
+    print("1. Test adding and removing books from the library")
+    print("2. Test adding and removing users")
+    print("3. Test the borrow and return processes to ensure the logic works between Library, User, and Book")
+    print("4. Return to Test Mode main menu")
+    while True:
+        try:
+            selected_class_for_testing = int(input("Choose 1, 2, 3, or 4: "))
+            clear_screen()
+            if selected_class_for_testing in [1, 2, 3, 4]:
+                break
+            else:
+                print("Invalid selection. Please choose 1, 2, 3, or 4.")
+        except ValueError:
+            print("Invalid selection. Please choose 1, 2, 3, or 4.")
