@@ -76,3 +76,40 @@ class Library:
         for book in self.books:
             if book.available:
                 print(book)
+
+
+# Create a list of books to be added to the library.
+books = [
+    Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565", True),
+    Book("To Kill a Mockingbird", "Harper Lee", "9780061120084", True),
+    Book("1984", "George Orwell", "9780451524935", True),
+    Book("Pride and Prejudice", "Jane Austen", "9780141439518", True),
+    Book("The Catcher in the Rye", "J.D. Salinger", "9780316769488", True)
+]
+# Create a list of users to be added to the library.
+users = [
+    User("Alice", 1, []),
+    User("Bob", 2, []),
+    User("Charlie", 3, [])
+]
+# Create a library object with the books and users lists.
+library = Library(books, users)
+
+print("Welcome to the library!")
+input("How can we help you today? Press Enter for Test Mode...")
+print(" -----------------------------")
+print("| Automated Library Test Mode |")
+print(" -----------------------------")
+print("Please choose the class you would like to test:")
+print("1. Book")
+print("2. User")
+print("3. Library")
+selected_class_for_testing = str(input())
+if selected_class_for_testing  == "1":
+    print("You have selected the Book class.")
+elif selected_class_for_testing == "2":
+    print("You have selected the User class.")
+elif selected_class_for_testing == "3":
+    print("You have selected the Library class.")
+
+
