@@ -8,7 +8,7 @@ class Book:
         self.available = available
     # A string representation of the book object is returned.
     def __str__(self):
-        self.__str__ = self.title + " by " + self.author
+        return (self.title + " by " + self.author)
     # The borrow_book method is defined to mark the books as unavailable as they are borrowed.
     def borrow_book(self):
         if self.available:
@@ -29,6 +29,7 @@ class User:
     def __init__(self, name, user_id, borrowed_books):
         self.name = name
         self.user_id = user_id
+        self.borrowed_books = borrowed_books
     # The borrowed_book method is defined to allow the user to borrow a book (if available).
     def borrow_book(self, book):
         if book.borrow_book():
@@ -100,16 +101,84 @@ input("How can we help you today? Press Enter for Test Mode...")
 print(" -----------------------------")
 print("| Automated Library Test Mode |")
 print(" -----------------------------")
-print("Please choose the class you would like to test:")
+print("Which class would you like to test:")
 print("1. Book")
 print("2. User")
 print("3. Library")
-selected_class_for_testing = str(input())
-if selected_class_for_testing  == "1":
-    print("You have selected the Book class.")
-elif selected_class_for_testing == "2":
-    print("You have selected the User class.")
-elif selected_class_for_testing == "3":
-    print("You have selected the Library class.")
 
+while True:
+    try:
+        selected_class_for_testing = int(input("Choose 1,2, or 3: "))
+        if selected_class_for_testing in [1, 2, 3]:
+            if selected_class_for_testing == 1:
+                print("You have selected to test the Book class.")
+            elif selected_class_for_testing == 2:
+                print("You have selected to test the User class.")
+            elif selected_class_for_testing == 3:
+                print("You have selected to test the Library class.")
+            break
+        else:
+            print("Invalid selection. Please choose 1, 2, or 3.")
+    except ValueError:
+        print("Invalid selection. Please choose 1, 2, or 3.")
 
+if selected_class_for_testing == 1:
+    print("Testing the Book class...")
+    print("Available books:")
+    library.list_available_books()
+    print("Borrowing a book...")
+    user = users[0]
+    book = books[0]
+    if library.borrow_book(user, book):
+        print("Book borrowed successfully.")
+    else:
+        print("Book not available for borrowing.")
+    print("Available books:")
+    library.list_available_books()
+    print("Returning a book...")
+    if library.return_book(user, book):
+        print("Book returned successfully.")
+    else:
+        print("Book not available for returning.")
+    print("Available books:")
+    library.list_available_books()
+elif selected_class_for_testing == 2:
+    print("Testing the User class...")
+    user = users[0]
+    print("Borrowed books for user " + user.name + ":")
+    user.view_borrowed_books()
+    print("Borrowing a book...")
+    book = books[0]
+    if user.borrow_book(book):
+        print("Book borrowed successfully.")
+    else:
+        print("Book not available for borrowing.")
+    print("Borrowed books for user " + user.name + ":")
+    user.view_borrowed_books()
+    print("Returning a book...")
+    if user.return_book(book):
+        print("Book returned successfully.")
+    else:
+        print("Book not available for returning.")
+    print("Borrowed books for user " + user.name + ":")
+    user.view_borrowed_books()
+elif selected_class_for_testing == 3:
+    print("Testing the Library class...")
+    print("Available books:")
+    library.list_available_books()
+    print("Borrowing a book...")
+    user = users[0]
+    book = books[0]
+    if library.borrow_book(user, book):
+        print("Book borrowed successfully.")
+    else:
+        print("Book not available for borrowing.")
+    print("Available books:")
+    library.list_available_books()
+    print("Returning a book...")
+    if library.return_book(user, book):
+        print("Book returned successfully.")
+    else:
+        print("Book not available for returning.")
+    print("Available books:")
+    library.list_available_books()
