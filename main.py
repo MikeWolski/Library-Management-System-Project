@@ -83,6 +83,10 @@ class Library:
     # The return_book method is defined to facilitate returning by interacting with User and Book classes.
     def return_book(self, user, book):
         return user.return_book(book)
+    # The list_books method is defined to show all books whether available or unavailable.
+    def list_books(self):
+        for book in self.books:
+            print(book)
     # The list_available_books method is defined to show all books currently available.
     def list_available_books(self):
         for book in self.books:
