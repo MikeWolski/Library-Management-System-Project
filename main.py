@@ -101,6 +101,11 @@ class Library:
     def list_users(self):
         for user in self.users:
             print(user)
+    # The view_all_borrowed_books method is defined to show all books currently borrowed by each user.
+    def view_all_borrowed_books(self):
+        for i, user in enumerate(self.users):
+            print("Books borrowed by " + user.name + ":")
+            user.view_borrowed_books()
 
 # Create a list of books to be added to the library.
 books = [
