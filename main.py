@@ -38,6 +38,9 @@ class User:
         self.name = name
         self.user_id = user_id
         self.borrowed_books = borrowed_books
+    # A string representation of the user object is returned.
+    def __str__(self):
+        return (str(self.user_id) + ": " + self.name + " has borrowed " + str(len(self.borrowed_books)) + " books.")
     # The borrowed_book method is defined to allow the user to borrow a book (if available).
     def borrow_book(self, book):
         if book.borrow_book():
@@ -90,6 +93,10 @@ class Library:
         for book in self.books:
             if not book.available:
                 print(book)
+    # The list_users method is defined to show all users currently registered in the library and their borrowed books.
+    def list_users(self):
+        for user in self.users:
+            print(user)
 
 # Create a list of books to be added to the library.
 books = [
@@ -111,63 +118,63 @@ library = Library(books, users)
 
 clear_screen()
 print("Welcome to the library!")
-input("How can we help you today? Press Enter for Test Mode...")
+input("Press Enter for Admin Panel...")
 
-def test_main_menu():
+def main_menu():
     clear_screen()
-    print(" -----------------------------")
-    print("| Library Test Mode Main Menu |")
-    print(" -----------------------------")
-    print("Which class would you like to test:")
-    print("1. Book")
-    print("2. User")
+    print(" ---------------------------------")
+    print("| Library Administrator Main Menu |")
+    print(" ---------------------------------")
+    print("Select a category to configure:")
+    print("1. Books")
+    print("2. Users")
     print("3. Library")
-    print("4. Exit")
+    print("4. Exit Program")
     while True:
         try:
-            selected_class_for_testing = int(input("Choose 1, 2, 3, or 4: "))
-            if selected_class_for_testing in [1, 2, 3, 4]:
+            selected_option = int(input("Choose 1, 2, 3, or 4: "))
+            if selected_option in [1, 2, 3, 4]:
                 clear_screen()
                 break
             else:
                 print("Invalid selection. Please choose a valid option.")
         except ValueError:
             print("Invalid selection. Please choose a valid option.")
-    if selected_class_for_testing == 1:
-        book_testing_menu()
-    elif selected_class_for_testing == 2:
-        user_testing_menu()
-    elif selected_class_for_testing == 3:
-        library_testing_menu()
-    elif selected_class_for_testing == 4:
+    if selected_option == 1:
+        books_menu()
+    elif selected_option == 2:
+        users_menu()
+    elif selected_option == 3:
+        library_menu()
+    elif selected_option == 4:
         exit()
 
-def book_testing_menu():
+def books_menu():
     clear_screen()
-    print(" --------------")
-    print("| Book Testing |")
-    print(" --------------")
+    print(" ------------")
+    print("| Books Menu |")
+    print(" ------------")
     print("\033[1mBooks currently available in the library:\033[0m")
     library.list_available_books()
     print()
     print("\033[1mBooks currently borrowed from the library:\033[0m")
     library.list_unavailable_books()
     print()
-    print("Which method of the Book class would you like to test:")
-    print("1. Test the creation of a book object")
-    print("2. Test borrow and return functionality (whether the availability status changes)")
-    print("3. Return to Test Mode main menu")
+    print("What would you like to do?")
+    print("1. Add a new book to the library")
+    print("2. Manually mark a book as borrowed or returned")
+    print("3. Return to admin main menu")
     while True:
         try:
-            selected_class_for_testing = int(input("Choose 1, 2, or 3: "))
+            selected_option = int(input("Choose 1, 2, or 3: "))
             clear_screen()
-            if selected_class_for_testing in [1, 2, 3]:
-                if selected_class_for_testing == 1:
+            if selected_option in [1, 2, 3]:
+                if selected_option == 1:
                     create_book_menu()
-                elif selected_class_for_testing == 2:
+                elif selected_option == 2:
                     borrow_return_menu()
-                elif selected_class_for_testing == 3:
-                    test_main_menu()
+                elif selected_option == 3:
+                    main_menu()
                 break
             else:
                 print("Invalid selection. Please choose a valid option.")
@@ -175,26 +182,26 @@ def book_testing_menu():
             print("Invalid selection. Please choose a valid option.")
 
 def create_book_menu():
-    print("Please enter the details for the book object to be created: ")
+    print("Please enter the details for the book being added: ")
     title = str(input("Title: "))
     author = str(input("Author: "))
     isbn = str(input("ISBN: "))
     new_book = Book(title, author, isbn, True)
     library.add_book(new_book)
-    print(new_book.__str__() + " created successfully!")
-    input("Press Enter to return to the book testing menu...")
-    book_testing_menu()
+    print(new_book.__str__() + " added successfully!")
+    input("Press Enter to return to the books menu...")
+    books_menu()
 
 def borrow_return_menu():
-    print("Would you like to test borrow or return functionality:")
-    print("1. Borrow")
-    print("2. Return")
+    print("Would you like to mark a book as borrowed or returned?")
+    print("1. Borrowed")
+    print("2. Returned")
     while True:
         try:
             return_or_borrow = int(input("Choose 1 or 2: "))
             clear_screen()
             if return_or_borrow == 1:
-                print("Please choose the number of the book you would like to borrow:")
+                print("Please choose the number of the book you would like to mark as borrowed:")
                 for i, book in enumerate(library.books):
                     if book.available:
                         print(str(i + 1) + ". " + book.__str__())
@@ -205,7 +212,7 @@ def borrow_return_menu():
                     print("Book could not be borrowed.")
             elif return_or_borrow == 2:
                 clear_screen()
-                print("Please choose the number of the book you would like to return:")
+                print("Please choose the number of the book you would like to mark as returned:")
                 for i, book in enumerate(library.books):
                     if not book.available:
                         print(str(i + 1) + ". " + book.__str__())
@@ -217,176 +224,79 @@ def borrow_return_menu():
             else:
                 print("Invalid selection. Please choose a valid option.")
             input("Press Enter to return to the book testing menu...")
-            book_testing_menu()
+            books_menu()
         except ValueError:
             print("Invalid selection. Please choose a valid option.")
 
-def user_testing_menu():
-    print(" --------------")
-    print("| User Testing |")
-    print(" --------------")
-    print("Which method of the User class would you like to test:")
+def users_menu():
+    clear_screen()
+    print(" ------------")
+    print("| Users Menu |")
+    print(" ------------")
+    print("\033[1mRegistered library members:\033[0m")
+    library.list_users()
+    print()
+    print("What would you like to do?")
     print("1. Test the borrowing functionality (whether the user can borrow available books)")
     print("2. Test the return functionality (whether the user can return books)")
-    print("3. Test viewing borrowed books")
-    print("4. Return to Test Mode main menu")
+    print("3. View borrowed books")
+    print("4. Return to admin main menu")
     while True:
         try:
-            selected_class_for_testing = int(input("Choose 1, 2, 3, or 4: "))
+            selected_option = int(input("Choose 1, 2, 3, or 4: "))
             clear_screen()
-            if selected_class_for_testing in [1, 2, 3, 4]:
-                if selected_class_for_testing == 1:
-                    print("Testing borrowing functionality...")
-                    print("Creating a book object...")
-                    new_book = Book("The Hobbit", "J.R.R. Tolkien", "9780345534835", True)
-                    print("Book object created successfully!")
-                    print("Title: " + new_book.title)
-                    print("Author: " + new_book.author)
-                    print("ISBN: " + new_book.isbn)
-                    print("Available: " + str(new_book.available))
-                    print("Creating a user object...")
-                    new_user = User("David", 4, [])
-                    print("User object created successfully!")
-                    print("Name: " + new_user.name)
-                    print("ID: " + str(new_user.user_id))
-                    print("Borrowing the book...")
-                    new_user.borrow_book(new_book)
-                    print("Book borrowed successfully!")
-                    print("Available: " + str(new_book.available))
-                elif selected_class_for_testing == 2:
-                    print("Testing return functionality...")
-                    print("Creating a book object...")
-                    new_book = Book("The Hobbit", "J.R.R. Tolkien", "9780345534835", True)
-                    print("Book object created successfully!")
-                    print("Title: " + new_book.title)
-                    print("Author: " + new_book.author)
-                    print("ISBN: " + new_book.isbn)
-                    print("Available: " + str(new_book.available))
-                    print("Creating a user object...")
-                    new_user = User("David", 4, [new_book])
-                    print("User object created successfully!")
-                    print("Name: " + new_user.name)
-                    print("ID: " + str(new_user.user_id))
-                    print("Returning the book...")
-                    new_user.return_book(new_book)
-                    print("Book returned successfully!")
-                    print("Available: " + str(new_book.available))
-                elif selected_class_for_testing == 3:
-                    print("Testing viewing borrowed books...")
-                    print("Creating a book object...")
-                    new_book = Book("The Hobbit", "J.R.R. Tolkien", "9780345534835", True)
-                    print("Book object created successfully!")
-                    print("Title: " + new_book.title)
-                    print("Author: " + new_book.author)
-                    print("ISBN: " + new_book.isbn)
-                    print("Available: " + str(new_book.available))
-                    print("Creating a user object...")
-                    new_user = User("David", 4, [new_book])
-                    print("User object created successfully!")
-                    print("Name: " + new_user.name)
-                    print("ID: " + str(new_user.user_id))
-                    print("Viewing borrowed books...")
-                    new_user.view_borrowed_books()
-                elif selected_class_for_testing == 4:
-                    test_main_menu()
+            if selected_option in [1, 2, 3, 4]:
+                if selected_option == 1:
+                    main_menu()
+                elif selected_option == 2:
+                    main_menu()
+                elif selected_option == 3:
+                    view_borrowed_books()
+                elif selected_option == 4:
+                    main_menu()
                 break
             else:
                 print("Invalid selection. Please choose a valid option.")
         except ValueError:
             print("Invalid selection. Please choose a valid option.")
 
-def library_testing_menu():
-    print(" -----------------")
-    print("| Library Testing |")
-    print(" -----------------")
-    print("Which method of the Library class would you like to test:")
+def view_borrowed_books():
+    print("Please choose the number of the user you would like to view borrowed books for:")
+    for i, user in enumerate(library.users):
+        print(str(i + 1) + ". " + user.name)
+    user_index = int(input("Choose a user: ")) - 1
+    clear_screen()
+    print("Books borrowed by " + library.users[user_index].name + ":")
+    library.users[user_index].view_borrowed_books()
+    input("Press Enter to return to the users menu...")
+    users_menu()
+
+def library_menu():
+    print(" --------------")
+    print("| Library Menu |")
+    print(" --------------")
+    print("What would you like to do?")
     print("1. Test adding and removing books from the library")
     print("2. Test adding and removing users")
     print("3. Test the borrow and return processes to ensure the logic works between Library, User, and Book")
-    print("4. Return to Test Mode main menu")
+    print("4. Return to admin main menu")
     while True:
         try:
-            selected_class_for_testing = int(input("Choose 1, 2, 3, or 4: "))
+            selected_option = int(input("Choose 1, 2, 3, or 4: "))
             clear_screen()
-            if selected_class_for_testing in [1, 2, 3, 4]:
-                if selected_class_for_testing == 1:
-                    print("Testing adding and removing books from the library...")
-                    print("Current books in the library:")
-                    for book in library.books:
-                        print(book)
-                    print("Creating a book object...")
-                    new_book = Book("The Hobbit", "J.R.R. Tolkien", "9780345534835", True)
-                    print("Book object created successfully!")
-                    print("Title: " + new_book.title)
-                    print("Author: " + new_book.author)
-                    print("ISBN: " + new_book.isbn)
-                    print("Adding the book to the library...")
-                    library.add_book(new_book)
-                    print("Book added successfully!")
-                    print("Current books in the library:")
-                    for book in library.books:
-                        print(book)
-                    print("Removing the book from the library...")
-                    library.remove_book(new_book)
-                    print("Book removed successfully!")
-                    print("Current books in the library:")
-                    for book in library.books:
-                        print(book)
-                elif selected_class_for_testing == 2:
-                    print("Testing adding and removing users from the library...")
-                    print("Current users in the library:")
-                    for user in library.users:
-                        print(user.name)
-                    print("Creating a user object...")
-                    new_user = User("David", 4, [])
-                    print("User object created successfully!")
-                    print("Name: " + new_user.name)
-                    print("ID: " + str(new_user.user_id))
-                    print("Adding the user to the library...")
-                    library.add_user(new_user)
-                    print("User added successfully!")
-                    print("Current users in the library:")
-                    for user in library.users:
-                        print(user.name)
-                    print("Removing the user from the library...")
-                    library.remove_user(new_user)
-                    print("User removed successfully!")
-                    print("Current users in the library:")
-                    for user in library.users:
-                        print(user.name)
-                elif selected_class_for_testing == 3:
-                    print("Testing borrowing and returning books from the library...")
-                    print("Current books in the library:")
-                    for book in library.books:
-                        print(book)
-                    print("Creating a book object...")
-                    new_book = Book("The Hobbit", "J.R.R. Tolkien", "9780345534835", True)
-                    print("Book object created successfully!")
-                    print("Title: " + new_book.title)
-                    print("Author: " + new_book.author)
-                    print("ISBN: " + new_book.isbn)
-                    print("Creating a user object...")
-                    new_user = User("David", 4, [])
-                    print("User object created successfully!")
-                    print("Name: " + new_user.name)
-                    print("ID: " + str(new_user.user_id))
-                    print("Adding the book to the library...")
-                    library.add_book(new_book)
-                    print("Book added successfully!")
-                    print("Borrowing the book...")
-                    library.borrow_book(new_user, new_book)
-                    print("Book borrowed successfully!")
-                    print("Available: " + str(new_book.available))
-                    print("Returning the book...")
-                    library.return_book(new_user, new_book)
-                    print("Book returned successfully!")
-                    print("Available: " + str(new_book.available))
-                elif selected_class_for_testing == 4:
-                    test_main_menu()
+            if selected_option in [1, 2, 3, 4]:
+                if selected_option == 1:
+                    main_menu()
+                elif selected_option == 2:
+                    main_menu()
+                elif selected_option == 3:
+                    main_menu()
+                elif selected_option == 4:
+                    main_menu()
                 break
             else:
                 print("Invalid selection. Please choose a valid option.")
         except ValueError:
             print("Invalid selection. Please choose a valid option.")
 
-test_main_menu()
+main_menu()
