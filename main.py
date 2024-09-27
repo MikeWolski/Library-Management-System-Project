@@ -40,7 +40,7 @@ class User:
         self.borrowed_books = borrowed_books
     # A string representation of the user object is returned.
     def __str__(self):
-        return (str(self.user_id) + ": " + self.name + " has borrowed " + str(len(self.borrowed_books)) + " books.")
+        return (self.name + " has " + str(len(self.borrowed_books)) + " books checked out.")
     # The borrowed_book method is defined to allow the user to borrow a book (if available).
     def borrow_book(self, book):
         if book.borrow_book():
@@ -106,6 +106,20 @@ class Library:
         for i, user in enumerate(self.users):
             print("Books borrowed by " + user.name + ":")
             user.view_borrowed_books()
+    # The available_books_count method is defined to return the number of books currently available.
+    def available_books_count(self):
+        count = 0
+        for book in self.books:
+            if book.available:
+                count += 1
+        return count
+    # The unavailable_books_count method is defined to return the number of books currently borrowed.
+    def unavailable_books_count(self):
+        count = 0
+        for book in self.books:
+            if not book.available:
+                count += 1
+        return count
 
 # Create a list of books to be added to the library.
 books = [
