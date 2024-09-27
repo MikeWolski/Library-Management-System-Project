@@ -76,31 +76,47 @@ def borrow_return_menu():
     print("Would you like to mark a book as borrowed or returned?")
     print("1. Borrowed")
     print("2. Returned")
+    list_available_books = []
+    for i, book in enumerate(library.books):
+        if book.available:
+            list_available_books.append(book)
+    list_unavailable_books = []
+    for i, book in enumerate(library.books):
+        if not book.available:
+            list_unavailable_books.append(book)
     while True:
         try:
             return_or_borrow = int(input("Choose 1 or 2: "))
             clear_screen()
             if return_or_borrow == 1:
-                print("Please choose the number of the book you would like to mark as borrowed:")
-                for i, book in enumerate(library.books):
-                    if book.available:
+                if len(list_available_books) > 0:
+                    print("Please choose the number of the book you would like to mark as borrowed:")
+                    for i, book in enumerate(list_available_books):
                         print(str(i + 1) + ". " + book.__str__())
-                book_index = int(input("Choose a book: ")) - 1
-                if library.borrow_book(library.users[0], library.books[book_index]):
+                    book_index = int(input("Choose a book: ")) - 1
+                    library.borrow_book(library.users[0], list_available_books[book_index])
                     print("Book borrowed successfully!")
+                    input("Press Enter to return to the book testing menu...")
+                    books_menu()
                 else:
-                    print("Book could not be borrowed.")
+                    print("There are no available books to borrow.")
+                    input("Press Enter to return to the book testing menu...")
+                    books_menu()
             elif return_or_borrow == 2:
-                clear_screen()
-                print("Please choose the number of the book you would like to mark as returned:")
-                for i, book in enumerate(library.books):
-                    if not book.available:
-                        print(str(i + 1) + ". " + book.__str__())
-                book_index = int(input("Choose a book: ")) - 1
-                if library.return_book(library.users[0], library.books[book_index]):
+                if len(list_unavailable_books) > 0:
+                    clear_screen()
+                    print("Please choose the number of the book you would like to mark as returned:")
+                    for i, book in enumerate(list_unavailable_books):
+                            print(str(i + 1) + ". " + book.__str__())
+                    book_index = int(input("Choose a book: ")) - 1
+                    library.return_book(library.users[0], list_unavailable_books[book_index])
                     print("Book returned successfully!")
+                    input("Press Enter to return to the book testing menu...")
+                    books_menu()
                 else:
-                    print("Book could not be returned.")
+                    print("There are no borrowed books to return.")
+                    input("Press Enter to return to the book testing menu...")
+                    books_menu()
             else:
                 print("Invalid selection. Please choose a valid option.")
             input("Press Enter to return to the book testing menu...")
@@ -183,16 +199,17 @@ def user_borrow_book_screen_2(user_index):
 def user_return_book():
     print("Please choose the number of the user you would like to test returning functionality for:")
     list_users_with_borrowed_books = []
+    for i, user in enumerate(library.users):
+        if len(user.borrowed_books) > 0:
+            list_users_with_borrowed_books.append(user)
     unavailable_book_count = library.unavailable_books_count()
     while unavailable_book_count > 0:
         try:
-            for i, user in enumerate(library.users):
-                if len(user.borrowed_books) > 0:
-                    print(str(i + 1) + ". " + user.name)
-                    list_users_with_borrowed_books.append(user)
+            for i, user in enumerate(list_users_with_borrowed_books):
+                print(str(i + 1) + ". " + user.name)
             user_index = int(input("Choose a user: ")) - 1
             if user_index in range(len(list_users_with_borrowed_books)):
-                user_return_book_screen_2(user_index)
+                user_return_book_screen_2(list_users_with_borrowed_books, user_index)
             else:
                 print("Invalid selection. Please choose a valid option.")
         except ValueError:
@@ -202,17 +219,17 @@ def user_return_book():
     input("Press Enter to return to the users menu...")
     users_menu()
 
-def user_return_book_screen_2(user_index):
+def user_return_book_screen_2(list_users_with_borrowed_books, user_index):
     clear_screen()
     print("Now select one of the following borrowed books for the user to return:")
     while True:
         try:
-            for i, book in enumerate(library.users[user_index].borrowed_books):
+            for i, book in enumerate(list_users_with_borrowed_books[user_index].borrowed_books):
                 print(str(i + 1) + ". " + book.__str__())
             book_index = int(input("Choose a book: ")) - 1
-            if book_index in range(len(library.users[user_index].borrowed_books)):
+            if book_index in range(len(list_users_with_borrowed_books[user_index].borrowed_books)):
                 clear_screen()
-                library.users[user_index].return_book(library.users[user_index].borrowed_books[book_index])
+                list_users_with_borrowed_books[user_index].return_book(list_users_with_borrowed_books[user_index].borrowed_books[book_index])
                 users_menu()
             else:
                 print("Invalid selection. Please choose a valid option.")
@@ -220,31 +237,19 @@ def user_return_book_screen_2(user_index):
             print("Invalid selection. Please choose a valid option.")
 
 def view_borrowed_books():
-    print("Please choose the number of the user you would like to view borrowed books for:")
     list_users_with_borrowed_books = []
     for i, user in enumerate(library.users):
         if len(user.borrowed_books) > 0:
             list_users_with_borrowed_books.append(user)
-    while len(list_users_with_borrowed_books) > 0:
-        try:
-            for i, user in enumerate(library.users):
-                if len(user.borrowed_books) > 0:
-                    print(str(i + 1) + ". " + user.name)
-            user_index = int(input("Choose a user: ")) - 1
-            if user_index in range(len(list_users_with_borrowed_books)):
-                clear_screen()
-                print("Books borrowed by " + library.users[user_index].name + ":")
-                library.users[user_index].view_borrowed_books()
-                input("Press Enter to return to the users menu...")
-                users_menu()
-            else:
-                print("Invalid selection. Please choose a valid option.")
-        except ValueError:
-            print("Invalid selection. Please choose a valid option.")
-    clear_screen()
-    print("There are currently no users with borrowed books.")
-    input("Press Enter to return to the users menu...")
-    users_menu()
+    if len(list_users_with_borrowed_books) > 0:
+        library.view_all_borrowed_books()
+        input("Press Enter to return to the users menu...")
+        users_menu()
+    else:
+        clear_screen()
+        print("There are currently no users with borrowed books.")
+        input("Press Enter to return to the users menu...")
+        users_menu()
 
 def library_menu():
     print(" --------------")
