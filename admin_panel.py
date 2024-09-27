@@ -252,6 +252,7 @@ def view_borrowed_books():
         users_menu()
 
 def library_menu():
+    clear_screen()
     print(" --------------")
     print("| Library Menu |")
     print(" --------------")
@@ -266,9 +267,9 @@ def library_menu():
             clear_screen()
             if selected_option in [1, 2, 3, 4]:
                 if selected_option == 1:
-                    main_menu()
+                    add_remove_books()
                 elif selected_option == 2:
-                    main_menu()
+                    add_remove_users()
                 elif selected_option == 3:
                     main_menu()
                 elif selected_option == 4:
@@ -278,5 +279,93 @@ def library_menu():
                 print("Invalid selection. Please choose a valid option.")
         except ValueError:
             print("Invalid selection. Please choose a valid option.")
+
+def add_remove_users():
+    print("Would you like to add or remove a user?")
+    print("1. Add")
+    print("2. Remove")
+    while True:
+        try:
+            add_or_remove = int(input("Choose 1 or 2: "))
+            clear_screen()
+            if add_or_remove == 1:
+                add_user_menu()
+            elif add_or_remove == 2:
+                remove_user_menu()
+            else:
+                print("Invalid selection. Please choose a valid option.")
+        except ValueError:
+            print("Invalid selection. Please choose a valid option.")
+
+def add_user_menu():
+    print("Please enter the details for the user being added: ")
+    name = str(input("Name: "))
+    id = int(input("ID: "))
+    new_user = User(name, id, [])
+    library.add_user(new_user)
+    print(new_user.name + " added successfully!")
+    input("Press Enter to return to the library testing menu...")
+    library_menu()
+
+def remove_user_menu():
+    if len(library.users) > 0:
+        clear_screen()
+        print("Please choose the number of the user you would like to remove:")
+        for i, user in enumerate(library.users):
+                print(str(i + 1) + ". " + user.name)
+        user_index = int(input("Choose a user: ")) - 1
+        library.remove_user(library.users[user_index])
+        print("User removed successfully!")
+        input("Press Enter to return to the library testing menu...")
+        library_menu()
+    else:
+        print("There are no more users in the system.")
+        input("Press Enter to return to the library testing menu...")
+        library_menu()
+
+def add_remove_books():
+    print("Would you like to add or remove a book?")
+    print("1. Add")
+    print("2. Remove")
+    while True:
+        try:
+            add_or_remove = int(input("Choose 1 or 2: "))
+            clear_screen()
+            if add_or_remove == 1:
+                add_books_menu()
+            elif add_or_remove == 2:
+                remove_books_menu()
+            else:
+                print("Invalid selection. Please choose a valid option.")
+        except ValueError:
+            print("Invalid selection. Please choose a valid option.")
+
+def add_books_menu():
+    print("Please enter the details for the book being added: ")
+    title = str(input("Title: "))
+    author = str(input("Author: "))
+    isbn = str(input("ISBN: "))
+    new_book = Book(title, author, isbn, True)
+    library.add_book(new_book)
+    print(new_book.title + " added successfully!")
+    input("Press Enter to return to the library testing menu...")
+    library_menu()
+
+def remove_books_menu():
+    if len(library.books) > 0:
+        clear_screen()
+        print("Please choose the number of the book you would like to remove:")
+        for i, book in enumerate(library.books):
+                print(str(i + 1) + ". " + book.title)
+        book_index = int(input("Choose a book: ")) - 1
+        library.remove_book(library.books[book_index])
+        print("Book removed successfully!")
+        input("Press Enter to return to the library testing menu...")
+        library_menu()
+    else:
+        print("There are no more books in the system.")
+        input("Press Enter to return to the library testing menu...")
+        library_menu()
+
 
 main_menu()
